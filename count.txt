@@ -1,0 +1,15 @@
+CREATE VIEW [dbo].[table_count_v] AS
+
+SELECT
+	SCHEMA_NAME(schema_id) as sch
+	,sysobjects.Name
+   ,''+SCHEMA_NAME(schema_id)+'.'+sys.tables.name+'' as fullname
+    , sysindexes.Rows
+FROM
+    sysobjects
+    INNER JOIN sysindexes
+    ON sysobjects.id = sysindexes.id
+	LEFT JOIN sys.tables on sysobjects.id = sys.tables.object_id
+WHERE
+    sysobjects.type = 'U'
+    AND sysindexes.IndId < 2
